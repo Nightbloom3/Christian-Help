@@ -34,31 +34,6 @@ describe('App Controller (e2e)', () => {
     await profilesService.deleteMany({});
   });
 
-  // beforeEach(async () => {
-  //   const moduleFixture: TestingModule = await Test.createTestingModule({
-  //     imports: [AppModule],
-  //   }).compile();
-
-  //   app = moduleFixture.createNestApplication();
-  //   await app.init();
-  // });
-
-  // it('/ (GET)', () => {
-  //   return request(app.getHttpServer())
-  //     .get('/')
-  //     .expect(200)
-  //     .expect('Hello World!');
-  // });
-
-  const testProfile1 = new CreateProfileDTO(
-    'Kasper', //firstName
-    'Tester', //lastName
-    'test@gmail.com', //email
-    '99999999', //password
-    true, //conditions
-    true, //newsletter
-  );
-
   //Testing authentication
   describe('Auth', () => {
     it('Sign up / Create Profile', async () => {
@@ -66,9 +41,9 @@ describe('App Controller (e2e)', () => {
       const beforeSignUp = await profilesService.findAll();
 
       const newProfile = new CreateProfileDTO(
-        'Kasper', //firstName
-        'Tester', //lastName
-        'test@gmail.com', //email
+        'Kasper', //firstName - required
+        'Tester', //lastName - required
+        'test@gmail.com', //email - required
         '99999999', //password
         true, //conditions
         true, //newsletter
@@ -90,17 +65,11 @@ describe('App Controller (e2e)', () => {
       // Here we validate that the email used to create "new profile", exists in the database
       expect(await profilesService.findOne("test@gmail.com")).not.toEqual(null || undefined);
       expect(afterSignUp.length).toEqual(1);
-
-      // Virker ikke endnu - Skal tjekke efter en værdi på objekterne i array'et
-      // expect(afterSignUp).toContainEqual(
-      //   {email: "test@gmail.com"}
-      // )
     });
 
     it('Sign up / Create Profile - Fail - not an email', async () => {
       //Arrange - Setup
       const beforeSignUp = await profilesService.findAll();
-      console.log("123", beforeSignUp);
 
       const newProfile = new CreateProfileDTO(
         'Kasper', //firstName
@@ -127,7 +96,6 @@ describe('App Controller (e2e)', () => {
     it('Sign up / Create Profile - Fail - no password', async () => {
       //Arrange - Setup
       const beforeSignUp = await profilesService.findAll();
-      console.log("123", beforeSignUp);
 
       const newProfile = new CreateProfileDTO(
         'Kasper', //firstName
@@ -151,64 +119,61 @@ describe('App Controller (e2e)', () => {
       expect(afterSignUp.length).toEqual(0);
     });
 
-    // it('Sign up / Create Profile - Fail - no first name', async () => {
-    //   //Arrange - Setup
-    //   const beforeSignUp = await profilesService.findAll();
-    //   console.log("123", beforeSignUp);
+    it('Sign up / Create Profile - Fail - no first name', async () => {
+      //Arrange - Setup
+      const beforeSignUp = await profilesService.findAll();
 
-    //   const newProfile = new CreateProfileDTO(
-    //     '', //firstName
-    //     'Tester', //lastName
-    //     'test@gmail.com', //email
-    //     '99999999', //password
-    //     true, //conditions
-    //     true, //newsletter
-    //   );
+      const newProfile = new CreateProfileDTO(
+        '', //firstName
+        'Tester', //lastName
+        'test@gmail.com', //email
+        '99999999', //password
+        true, //conditions
+        true, //newsletter
+      );
 
-    //   // Act
-    //   const signUp = await request(app.getHttpServer())
-    //     .post('/profiles')
-    //     .send(newProfile)
-    //     .expect(400);//Assert - Bad Request
+      // Act
+      const signUp = await request(app.getHttpServer())
+        .post('/profiles')
+        .send(newProfile)
+        .expect(400);//Assert - Bad Request
 
-    //   // Assert
-    //   const afterSignUp = await profilesService.findAll();
-    //   expect(signUp.body.message).toEqual(["Did you forget your name ?"]);
-    //   expect(beforeSignUp.length).toEqual(0);
-    //   expect(afterSignUp.length).toEqual(0);
-    // });
+      // Assert
+      const afterSignUp = await profilesService.findAll();
+      expect(signUp.body.message).toEqual(["firstName must contain only letters (a-zA-Z)"]);
+      expect(beforeSignUp.length).toEqual(0);
+      expect(afterSignUp.length).toEqual(0);
+    });
 
-    // it('Sign up / Create Profile - Fail - no last name', async () => {
-    //   //Arrange - Setup
-    //   const beforeSignUp = await profilesService.findAll();
-    //   console.log("123", beforeSignUp);
+    it('Sign up / Create Profile - Fail - no last name', async () => {
+      //Arrange - Setup
+      const beforeSignUp = await profilesService.findAll();
 
-    //   const newProfile = new CreateProfileDTO(
-    //     'Kasper', //firstName
-    //     '', //lastName
-    //     'test@gmail.com', //email
-    //     '99999999', //password
-    //     true, //conditions
-    //     true, //newsletter
-    //   );
+      const newProfile = new CreateProfileDTO(
+        'Kasper', //firstName
+        '', //lastName
+        'test@gmail.com', //email
+        '99999999', //password
+        true, //conditions
+        true, //newsletter
+      );
 
-    //   // Act
-    //   const signUp = await request(app.getHttpServer())
-    //     .post('/profiles')
-    //     .send(newProfile)
-    //     .expect(400);//Assert - Bad Request
+      // Act
+      const signUp = await request(app.getHttpServer())
+        .post('/profiles')
+        .send(newProfile)
+        .expect(400);//Assert - Bad Request
 
-    //   // Assert
-    //   const afterSignUp = await profilesService.findAll();
-    //   expect(signUp.body.message).toEqual(["Did you forget your last name ?"]);
-    //   expect(beforeSignUp.length).toEqual(0);
-    //   expect(afterSignUp.length).toEqual(0);
-    // });
+      // Assert
+      const afterSignUp = await profilesService.findAll();
+      expect(signUp.body.message).toEqual(["Did you forget your last name ?"]);
+      expect(beforeSignUp.length).toEqual(0);
+      expect(afterSignUp.length).toEqual(0);
+    });
 
     it('Sign up / Create Profile - Fail - firstname numbers', async () => {
       //Arrange - Setup
       const beforeSignUp = await profilesService.findAll();
-      console.log("123", beforeSignUp);
 
       const newProfile = new CreateProfileDTO(
         '123', //firstName
@@ -280,19 +245,32 @@ describe('App Controller (e2e)', () => {
       expect(loginResponse.body.email).toBeNull;
     });
 
-    // it('Login - Wrong Email', async () => {
-    //   //Arrange
+    it('Login - Wrong Email', async () => {
+      //Arrange
+      const myProfile = new CreateProfileDTO(
+        'Kasper', //firstName
+        'Tester', //lastName
+        'test@gmail.com', //email
+        '99999999', //password
+        true, //conditions
+        true, //newsletter
+      );
+      
+      await profilesService.create(myProfile);
 
-    //   //Act
-    //   const result = await request(app.getHttpServer())
-    //   .post('/profiles/auth/login')
-    //   .send({
-    //     email: testProfile1.email,
-    //     password: testProfile1.password,
-    //   });
+      //Act
+      const response = await request(app.getHttpServer())
+      .post('/profiles/auth/login')
+      .send({
+        email: "MyWrongEmail@Tests.com",
+        password: myProfile.password,
+      });
 
-    //   //Assert
-    // });
+      //Assert
+      expect(response.status).toBe(404);
+      // if message is changed with error handling - look at - auth.service - message comes from there
+      expect(response.body.message).toEqual('This email does not exist');
+    });
 
     it('Login - Wrong password', async () => {
       //Arrange
@@ -318,7 +296,7 @@ describe('App Controller (e2e)', () => {
       //Assert
       expect(response.status).toBe(401);
       // if message is changed with error handling - look at - auth.service - message comes from there
-      expect(response.body.message).toEqual('Validate throw - Wrong password');
+      expect(response.body.message).toEqual('Wrong password');
     });
 
     describe('Get', () => {
@@ -330,7 +308,7 @@ describe('App Controller (e2e)', () => {
           'Fake@mail.dk',
           'MyPassword123',
           true,
-          true,
+          true
         );
         const getAllProfilesObject2 = new CreateProfileDTO(
           'Peter',
@@ -349,7 +327,7 @@ describe('App Controller (e2e)', () => {
           'test@mail.dk',
           '123456789',
           true,
-          true,
+          true
         );
 
         const signUpResponse = await request(app.getHttpServer())
@@ -402,14 +380,63 @@ describe('App Controller (e2e)', () => {
         expect(result.body.length).toBeNull;
         expect(result.status).toBe(401);
       });
+
+      it('Get all profiles - Filter Show only "status" with true', async () => {
+        //Arrange
+        const getAllProfilesObject1 = new CreateProfileDTO(
+          'Jens',
+          'Tester',
+          'Fake@mail.dk',
+          'MyPassword123',
+          true,
+          true,
+        );
+        const getAllProfilesObject2 = new CreateProfileDTO(
+          'Peter',
+          'Tester',
+          'SuperFake@mail.dk',
+          'MyPassword1234',
+          true,
+          true,
+        );
+        await profilesService.create(getAllProfilesObject1);
+        await profilesService.create(getAllProfilesObject2);
+
+        const SignUpProfile = new CreateProfileDTO(
+          'Kasper',
+          'Tester',
+          'test@mail.dk',
+          '123456789',
+          true,
+          true,
+        );
+
+        const signUpResponse = await request(app.getHttpServer())
+          .post('/profiles')
+          .send(SignUpProfile)
+          .expect(201);
+
+        // Act
+        const token = signUpResponse.body.access_token;
+
+        const response = await request(app.getHttpServer())
+          .get('/profiles')
+          .set('Authorization', `Bearer ${token}`);
+
+        // Assert
+        expect(response.body.length).toBeGreaterThan(2);
+        expect(response.body.length).toBeLessThanOrEqual(2);
+        expect(response.status).toBe(200);
+      });
     });
    });
-
-     // Closing app after all tests => not hanging.
+   
+  // Closing app after all tests => not hanging.
   afterAll(async () => {
     app.close();
   });
 });
+
 
 // Kig på workflow fil på git – daos git
 

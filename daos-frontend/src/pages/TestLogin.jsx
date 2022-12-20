@@ -188,28 +188,28 @@ const Create = () => {
     //     // });
     // }
 
-    const validateToken = () => {
-        const token = localStorage.token;
+    // const validateToken = () => {
+    //     const token = localStorage.token;
 
-        const isMyTokenExpired = isExpired(token);
+    //     const isMyTokenExpired = isExpired(token);
 
-        console.log(isMyTokenExpired);
+    //     console.log(isMyTokenExpired);
 
-            /*
-              If is a valid jwt, 'decodedToken' will be a object
-              it could look like:
-              {
-                "name": "Gustavo",
-                "iat": 1596408259,
-                "exp": 4752168259
-              }
+    //         /*
+    //           If is a valid jwt, 'decodedToken' will be a object
+    //           it could look like:
+    //           {
+    //             "name": "Gustavo",
+    //             "iat": 1596408259,
+    //             "exp": 4752168259
+    //           }
           
-              'isExpired' will return a boolean
-              true => your token is expired
-              false => your token is not expired
-            */
-        }
-    }
+    //           'isExpired' will return a boolean
+    //           true => your token is expired
+    //           false => your token is not expired
+    //         */
+    //     }
+    // }
 
 
 
@@ -365,7 +365,7 @@ const Create = () => {
             <button onClick={fetchWithAuthentication}>Fetch With Auth - "protected"</button>
             <button onClick={fetchWithAuthenticationGetAll}>Fetch With Auth - "Get All"</button>
             <button onClick={fetchByIdTest}>Fetch By Id</button>
-            <button onClick={validateToken}>validateToken</button>
+            {/* <button onClick={validateToken}>validateToken</button> */}
         </div>
         
         <div>
@@ -379,7 +379,6 @@ const Create = () => {
 
             </div></>
     );
-
 
 }
 

@@ -163,31 +163,53 @@ const Create = () => {
         })
     };
 
+    // const validateToken = () => {
+    //     console.log("hello")
+
+    //     jwt.verify(localStorage.token, 'shhhhh', function(err, decoded) {
+    //         if (err) {
+    //             console.log("yep")
+    //           /*
+    //             err = {
+    //               name: 'TokenExpiredError',
+    //               message: 'jwt expired',
+    //               expiredAt: 1408621000
+    //             }
+    //           */
+    //         }
+    //       });
+
+
+    //     // jwt.verify(localStorage.token, 'secret', function(err, decode) {
+    //     //     if (err) {
+    //     //         console.log(err);
+    //     //     }
+    //     //     console.log("not here yet")
+    //     // });
+    // }
+
     const validateToken = () => {
-        console.log("hello")
+        const token = localStorage.token;
 
-        jwt.verify(localStorage.token, 'shhhhh', function(err, decoded) {
-            if (err) {
-                console.log("yep")
-              /*
-                err = {
-                  name: 'TokenExpiredError',
-                  message: 'jwt expired',
-                  expiredAt: 1408621000
-                }
-              */
-            }
-          });
+        const isMyTokenExpired = isExpired(token);
 
+        console.log(isMyTokenExpired);
 
-        // jwt.verify(localStorage.token, 'secret', function(err, decode) {
-        //     if (err) {
-        //         console.log(err);
-        //     }
-        //     console.log("not here yet")
-        // });
+            /*
+              If is a valid jwt, 'decodedToken' will be a object
+              it could look like:
+              {
+                "name": "Gustavo",
+                "iat": 1596408259,
+                "exp": 4752168259
+              }
+          
+              'isExpired' will return a boolean
+              true => your token is expired
+              false => your token is not expired
+            */
+        }
     }
-
 
 
 

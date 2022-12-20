@@ -20,52 +20,10 @@ export class ProfilesService {
     // }
 
     async findOne(email: string): Promise<Profile | undefined> {
-        let foundProfile = this.profileModel.findOne({ email: email });
-        
-        return foundProfile;
-
-        // if (!foundProfile === null) {
-        //     return foundProfile
-        // }
-        // return null;
+        return await this.profileModel.findOne({ email: email });
+        // let foundProfile = this.profileModel.findOne({ email: email });
+        // return await foundProfile;
     }
-
-    // async findOne(email: string): Promise<Profile | undefined> {
-    //     try {
-    //         let data = await this.profileModel.findOne({email: email });
-    //         console.log(`findOne success--> ${data}`);
-    //         if(!data) {
-    //           throw new Error('no document found');
-    //           return null;
-    //         }
-    //         return data;
-    //     } catch (error) {
-    //         console.log(`findOne error--> ${error}`);
-    //         return error;
-    //     }
-    // }
-
-    // async findOne(email: string): Promise<Profile | undefined> {
-    //     console.log("går galt i find one")
-    //     let foundProfile = this.profileModel.findOne({ email: email });
-    //     console.log(foundProfile.exists)
-    //     if (!foundProfile){
-    //         console.log("fandt ikke noget")
-    //     }
-    //     else {
-    //         return foundProfile;
-    //     }
-    // }
-
-    // async findOne(email: string): Promise<any | undefined> {
-    //     this.profileModel.findOne({email: email}, (err, result) => {
-    //         console.log(email)
-    //         if (err) throw err;
-    //         console.log(err)
-    //         console.log(result);
-    //         return result;
-    //     });
-    // }
 
     async findAll(): Promise<Profile[]> {
         return await this.profileModel.find({});

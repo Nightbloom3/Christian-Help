@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
+import { TestModule } from './../src/test.module';
 import { ProfilesService } from './../src/profiles/profiles.service';
 import { CreateProfileDTO } from './../src/profiles/dtos/create-profile.dto';
 
@@ -12,13 +13,14 @@ import { CreateProfileDTO } from './../src/profiles/dtos/create-profile.dto';
 
 //Cannot find module 'src/profiles/schemas/profile.schema' from '../src/ensembles/schemas/ensemble.schema.ts'
 
-describe('AppController (e2e)', () => {
+describe('App Controller (e2e)', () => {
   let app: INestApplication;
   let profilesService: ProfilesService;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
+      //imports: [AppModule],
+      imports: [TestModule],
     }).compile();
 
     profilesService = moduleFixture.get(ProfilesService);
@@ -30,11 +32,6 @@ describe('AppController (e2e)', () => {
   beforeEach(async () => {
     // delete all profiles
     await profilesService.deleteMany({});
-  });
-
-  // Closing app after all tests => not hanging.
-  afterAll(async () => {
-    app.close();
   });
 
   // beforeEach(async () => {
@@ -407,6 +404,11 @@ describe('AppController (e2e)', () => {
       });
     });
    });
+
+     // Closing app after all tests => not hanging.
+  afterAll(async () => {
+    app.close();
+  });
 });
 
 // Kig på workflow fil på git – daos git

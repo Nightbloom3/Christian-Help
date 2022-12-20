@@ -1,11 +1,11 @@
 import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Request, UseGuards } from '@nestjs/common';
 
-// import { AuthService } from './../../src/auth/auth.service';
-// import { JwtAuthGuard } from './../../src/auth/guards/jwt-auth.guards';
-// import { LocalAuthGuard } from './../../src/auth/guards/local-auth.guard';
-import { AuthService } from 'src/auth/auth.service';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guards';
-import { LocalAuthGuard } from 'src/auth/guards/local-auth.guard';
+import { AuthService } from './../../src/auth/auth.service';
+import { JwtAuthGuard } from './../../src/auth/guards/jwt-auth.guards';
+import { LocalAuthGuard } from './../../src/auth/guards/local-auth.guard';
+// import { AuthService } from 'src/auth/auth.service';
+// import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guards';
+// import { LocalAuthGuard } from 'src/auth/guards/local-auth.guard';
 
 import { CreateProfileDTO } from './dtos/create-profile.dto';
 import { InstrumentDTO } from './dtos/instrument-profile.dto';
@@ -26,11 +26,19 @@ export class ProfilesController {
     @UseGuards(LocalAuthGuard)
     @Post('auth/login')
     async login(@Request() req) {
-        console.log(req.user)
-      return this.authService.login(req.user);
-      // The request has to be a user request
-      // if profile request it becomes undefined
+      return this.authService.login(req.user).catch(() => {
+        throw new HttpException('bad request', HttpStatus.BAD_REQUEST);
+      });
     }
+
+    // @UseGuards(LocalAuthGuard)
+    // @Post('auth/login')
+    // async login(@Request() req) {
+    //     console.log(req.user)
+    //   return this.authService.login(req.user);
+    //   // The request has to be a user request
+    //   // if profile request it becomes undefined
+    // }
 
     // This is just a test route to see auth working  
     @UseGuards(JwtAuthGuard)
@@ -62,6 +70,7 @@ export class ProfilesController {
     }
 
     // URL = /profiles/:id
+    @UseGuards(JwtAuthGuard)
     @Get(':id')
     findSpecific(@Param('id') id): Promise<Profile> {
         return this.profilesService.findSpecific(id).then((result) => {

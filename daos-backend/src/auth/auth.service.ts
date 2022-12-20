@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { ProfilesService } from 'src/profiles/profiles.service';
 //import { ProfilesService } from './../../src/profiles/profiles.service';
 import { JwtService } from '@nestjs/jwt';
@@ -14,6 +14,9 @@ export class AuthService {
   async validateProfile(email: string, password: string): Promise<any> {
     console.log(password)
     const profile = await this.profilesService.findOne(email);
+    if (profile === null){
+      throw new NotFoundException("This email does not exist");
+    }
     console.log(profile)
     const validPassword = await bcrypt.compare(password, profile.password);
     console.log(password)
@@ -21,34 +24,8 @@ export class AuthService {
     if (profile && validPassword === true) {
       console.log(" ValidateProfile - Auth Service - True",profile);
     return profile;
-
-    // // Calling the findOne function from profileService - based on the Email form body
-    // console.log("auth - service - validateProfile", password)
-    // console.log("auth - service - validateProfile", email)
-    // const profile = await this.profilesService.findOne(email);
-    // console.log(profile)
-    // console.log(profile.email)
-    // if (profile === null){
-    //   throw new UnauthorizedException("validate throw - wrong email");
-    // }
-    // const validPassword = await bcrypt.compare(password, profile.password);
-      
-    // if (profile && validPassword === true) {
-    //   console.log("ValidateProfile - Auth Service - True",profile);
-    // return profile; 
-
-        //TODO: Follow up on why this happens - and solve it by mongo Doc as Christian talked about
-    // if this becomes an spread operator
-    // So we can exclud password being send
-    // It fucks up something els becoming undefined
-
-    // if (profile && profile.password === password) {
-    //   const { password, ...result } = profile;
-    //   return result;
-    // }
   }
-  throw new UnauthorizedException("Validate throw - Wrong password");
-  return null;
+  throw new UnauthorizedException("Wrong password");
 }
 
   async login(profile: any) {

@@ -1,0 +1,27 @@
+name: Continous Integration
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      
+      - name: Install node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+
+      - name: Install mongodb
+        uses: supercharge/mongodb-github-action@1.8.0
+        with:
+          mongodb-version: '6'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Execute e2e tests
+        run: npm run test:e2e

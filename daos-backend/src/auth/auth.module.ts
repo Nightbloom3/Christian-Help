@@ -20,7 +20,7 @@ import { LocalStrategy } from './strategies/local.strategy';
     JwtModule.register({
       // Key to sign payload / lock it
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '3000s' },
+      signOptions: { expiresIn: '30s' },
     }),
   ],
   controllers: [ProfilesController],

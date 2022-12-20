@@ -1,11 +1,11 @@
 import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Request, UseGuards } from '@nestjs/common';
 
-import { AuthService } from './../../src/auth/auth.service';
-import { JwtAuthGuard } from './../../src/auth/guards/jwt-auth.guards';
-import { LocalAuthGuard } from './../../src/auth/guards/local-auth.guard';
-// import { AuthService } from 'src/auth/auth.service';
-// import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guards';
-// import { LocalAuthGuard } from 'src/auth/guards/local-auth.guard';
+// import { AuthService } from './../../src/auth/auth.service';
+// import { JwtAuthGuard } from './../../src/auth/guards/jwt-auth.guards';
+// import { LocalAuthGuard } from './../../src/auth/guards/local-auth.guard';
+import { AuthService } from 'src/auth/auth.service';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guards';
+import { LocalAuthGuard } from 'src/auth/guards/local-auth.guard';
 
 import { CreateProfileDTO } from './dtos/create-profile.dto';
 import { InstrumentDTO } from './dtos/instrument-profile.dto';
